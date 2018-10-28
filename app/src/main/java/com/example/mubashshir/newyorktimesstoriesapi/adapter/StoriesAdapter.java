@@ -1,16 +1,20 @@
-package com.example.mubashshir.newyorktimesstoriesapi;
+package com.example.mubashshir.newyorktimesstoriesapi.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.example.mubashshir.newyorktimesstoriesapi.R;
+import com.example.mubashshir.newyorktimesstoriesapi.model.Story;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,12 +26,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
-        public ImageView thumbnail;
+        public ImageView imageView;
 
         public MyViewHolder(View view) {
             super(view);
             title=(TextView)view.findViewById(R.id.title);
-            thumbnail=(ImageView)view.findViewById(R.id.imguser);
+            imageView=(ImageView)view.findViewById(R.id.imguser);
         }
     }
 
@@ -46,18 +50,17 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-     //   Article article = this.getItem(position);
         Story story= albumList.get(position);
 
         holder.title.setText(story.getHeadline());
 
-        String storyimage = story.getThumbnail();
+        String storyimage = story.getImage();
         if (!TextUtils.isEmpty(storyimage)) {
             try {
-                Picasso.with(mContext).load(story.getThumbnail())
+                Picasso.with(mContext).load(story.getImage())
                         .error(R.drawable.ic_launcher_background)
                         .placeholder(R.drawable.ic_launcher_foreground)
-                        .into(holder.thumbnail);
+                        .into(holder.imageView);
             }catch (Exception e){
                 Log.d("Image error**********",e.getMessage());
             }

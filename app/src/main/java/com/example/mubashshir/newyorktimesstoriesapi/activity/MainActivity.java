@@ -1,4 +1,4 @@
-package com.example.mubashshir.newyorktimesstoriesapi;
+package com.example.mubashshir.newyorktimesstoriesapi.activity;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -10,12 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.mubashshir.newyorktimesstoriesapi.R;
+import com.example.mubashshir.newyorktimesstoriesapi.model.Story;
+import com.example.mubashshir.newyorktimesstoriesapi.adapter.StoriesAdapter;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -36,11 +38,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView=(RecyclerView)findViewById(R.id.my_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if(!isNetworkAvaliable(this)){
-            Toast.makeText(getApplicationContext(),"Internet connection is unavailable",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Internet connection is not available",Toast.LENGTH_SHORT).show();
             return;
         }
-        getData();
         data = new ArrayList<>();
+        getData();
     }
     public  void getData(){
         AsyncHttpClient client = new AsyncHttpClient();
@@ -48,14 +50,15 @@ public class MainActivity extends AppCompatActivity {
         Log.v("stuff", url);
         RequestParams params = new RequestParams();
         params.put("api-key", "14ac0c9417a24a03a456e90958fdc7ac");
-        params.put("page", "0");
+      //  params.put("page", "0"
+        //
+        // );
         Log.v("stuff", url);
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     JSONArray articleJsonResults = null;
-                    try {
                         articleJsonResults = response.getJSONArray("results");
                         for (int i = 0; i < articleJsonResults.length(); i++) {
                             JSONObject temp = articleJsonResults.getJSONObject(i);
@@ -64,10 +67,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         storiesAdapter = new StoriesAdapter(MainActivity.this, data);
                         recyclerView.setAdapter(storiesAdapter);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
